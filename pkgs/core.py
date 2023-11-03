@@ -4,18 +4,16 @@
 import math
 
 
-label = {# {{{
-    "estado_civil" : 0,
-    "instrucao"    : 1,
-    "nfilho"       : 2,
-    "salario"      : 3,
-    "idade"        : 4,
-    "meses"        : 5,
-    "regiao"       : 6,
-}# }}}
-
-
-employees = [# {{{
+label = {  # {{{
+    "estado_civil": 0,
+    "instrucao": 1,
+    "nfilho": 2,
+    "salario": 3,
+    "idade_anos": 4,
+    "idade_meses": 5,
+    "regiao": 6,
+}  # }}}
+employees = [  # {{{
     ("solteiro", "Fundamental", math.nan, 4.00, 26, 3, "interior"),
     ("casado", "Fundamental", 1, 4.56, 32, 10, "capital"),
     ("casado", "Fundamental", 2, 5.25, 36, 5, "capital"),
@@ -52,13 +50,48 @@ employees = [# {{{
     ("solteiro", "Superior", math.nan, 18.75, 33, 7, "capital"),
     ("casado", "Médio", 2, 19.40, 48, 11, "capital"),
     ("casado", "Superior", 3, 23.30, 42, 2, "interior"),
-]# }}}
+]  # }}}
+
+
+N = len(employees)
+
+
+def view(keyword):
+    v = [e[label[keyword]] for e in employees]
+    return v
+
+
+def freq(keyword):
+    V = view(keyword)
+    v = {}
+    for x in V:
+        if x not in v.keys():
+            v[x] = 1
+        else:
+            v[x] += 1
+    return v
+
+
+def salary_range():
+    V = view("salario")
+    R = [(4.0, 8.0), (8.0, 12.0), (12.0, 16.0), (16.0, 20.0), (20.0, 24.0)]
+    s = {}
+    i = 0
+    for r in R:
+        v = [x for x in V if x >= r[0] and x < r[1]]
+        s[i] = {
+            "range": r,
+            "frequency": len(v),
+            "percentage": round(len(v) / N, 2),
+        }
+        i += 1
+    return s
 
 
 def main():
-    for eee in employees:
-        if eee[label['regiao']] == 'interior' and eee[label['estado_civil']] == 'casado':
-            print(eee)
+    # V = view("instrucao")
+    v = freq("nfilho")
+    print(v)
 
 
 if __name__ == "__main__":
